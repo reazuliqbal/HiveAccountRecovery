@@ -1,3 +1,12 @@
+a {
+    text-decoration: none;
+}
+a:hover,
+a:focus,
+a:active {
+    text-decoration: none;
+}
+
 label {
     font-weight: 500;
 }
