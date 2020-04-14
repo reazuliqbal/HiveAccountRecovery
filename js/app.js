@@ -137,11 +137,11 @@ $(document).ready(async function () {
     } else {
       feedback.empty().removeClass('alert-success').removeClass('alert-warning').removeClass('alert-danger');
 
-      const isEligible = await checkEligibility(username);
+      const recoveryRequest = await client.database.call('get_recovery_request', [username])
 
-      if (isEligible) {
+      if (recoveryRequest && new Date(`${recoveryRequest.expires}Z`).getTime() > new Date().getTime()) {
 
-        const newOwner = getPrivateKeys(username, newPassword, ['owner']);
+        const newOwner = getPrivateKeys(username, newPassword, ['owner', 'active', 'posting', 'memo']);
         const oldOwner = getPrivateKeys(username, oldPassword, ['owner']);
 
         const op = ['recover_account', {
@@ -149,22 +149,39 @@ $(document).ready(async function () {
           new_owner_authority: dhive.Authority.from(newOwner.ownerPubkey),
           recent_owner_authority: dhive.Authority.from(oldOwner.ownerPubkey),
           extensions: []
-        }
-        ];
+        }];
+
+        const [account] = await client.database.getAccounts([username]);
+
+        const accountUpdateObj = {
+          account: username,
+          active: dhive.Authority.from({ weight_threshold: account.active.weight_threshold, account_auths: account.active.account_auths, key_auths: [[newOwner.activePubkey, 1]] }),
+          posting: dhive.Authority.from({ weight_threshold: account.posting.weight_threshold, account_auths: account.posting.account_auths, key_auths: [[newOwner.postingPubkey, 1]] }),
+          memo_key: newOwner.memoPubkey,
+          json_metadata: account.json_metadata,
+        };
 
         // Signing the operation with both old and new owner key
         client.broadcast.sendOperations([op], [dhive.PrivateKey.from(oldOwner.owner), dhive.PrivateKey.from(newOwner.owner)])
-          .then((r) => {
+          .then(async (r) => {
             console.log(r);
             feedback.addClass('alert-success').html(`<strong>${username}</strong> has been recovered successfully.</strong>`);
+
+            // Updating account with the new posting and active key
+            client.broadcast.updateAccount(accountUpdateObj, dhive.PrivateKey.from(newOwner.owner))
+              .then(async (r) => {
+                console.log(r);
+              })
+              .catch(e => {
+                console.log(e);
+              });
           })
           .catch(e => {
             console.log(e);
             feedback.addClass('alert-danger').text(e.message);
           });
       } else {
-        feedback.addClass('alert-warning');
-        feedback.html(`Owner authority of <strong>${username}</strong> has not changed in last 30 days!`);
+        feedback.addClass('alert-warning').html(`Unable to find recovery request for <strong>${username}</strong> or the request has expired. Please start the procedure again.`);
       }
     }
   });
