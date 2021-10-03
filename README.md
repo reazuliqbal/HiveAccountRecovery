@@ -2,7 +2,7 @@
 
 ## Website
 
-https://codebull.github.io/HiveAccountRecovery/
+https://reazuliqbal.github.io/HiveAccountRecovery/
 
 ## Technology
 
