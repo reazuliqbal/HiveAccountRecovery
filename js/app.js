@@ -1,4 +1,4 @@
-const client = new dhive.Client('https://api.hive.blog');
+const client = new dhive.Client('https://api.hive.blog', 'https://api.deathwing.me', 'https://rpc.ecency.com', 'https://hive-api.arcange.eu', 'https://rpc.mahdiyari.info');
 
 // Generates Aall Private Keys from username and password
 function getPrivateKeys(username, password, roles = ['owner', 'active', 'posting', 'memo']) {
@@ -217,5 +217,107 @@ $(document).ready(async function () {
         });
     }
   });
+
+  // Processing change keys form
+  $('#change-keys').submit(async function (e) {
+    e.preventDefault();
+
+    const feedback = $('#alert-change-keys');
+    const username = $('#hive-username').val().toLowerCase()
+
+    const keys = {
+      'Owner Key': $('#public-owner-key').val(),
+      'Active Key': $('#public-active-key').val(),
+      'Posting Key': $('#public-posting-key').val(),
+      'Memo Key': $('#public-memo-key').val(),
+    }
+
+    const privOwnerKey = $('#private-owner-key').val();
+
+    feedback.removeClass('alert-danger alert-success').empty()
+
+    if (!dhive.cryptoUtils.isWif(privOwnerKey)) {
+      feedback.addClass('alert-danger').text('Invalid current private owner key.');
+      return
+    }
+
+    let validPubKey = true
+
+    const regex = new RegExp('^STM[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{50}$')
+
+    const keyTypes = Object.keys(keys)
+
+    for (let i = 0; i < keyTypes.length; i += 1) {
+      const k = keyTypes[i];
+
+      if (!regex.test(keys[k])) {
+        feedback.addClass('alert-danger').text(`Invalid public ${k}.`);
+        validPubKey = false
+
+        break;
+      }
+    }
+
+    if (validPubKey) {
+      const [account] = await client.database.getAccounts([username])
+
+      if (!account) {
+        feedback.addClass('alert-danger').text(`Invalid Hive username: ${username}.`);
+
+        return
+      }
+
+
+      const ownerKey = dhive.PublicKey.fromString(keys['Owner Key']);
+      const activeKey = dhive.PublicKey.fromString(keys['Active Key']);
+      const postingKey = dhive.PublicKey.fromString(keys['Posting Key']);
+      const memoKey = dhive.PublicKey.fromString(keys['Memo Key']);
+
+
+      const ownerAuth = new dhive.Authority({
+        weight_threshold: account.owner.weight_threshold,
+        account_auths: account.owner.account_auths,
+        key_auths: [[ownerKey, 1]]
+      })
+
+      const activeAuth = new dhive.Authority({
+        weight_threshold: account.active.weight_threshold,
+        account_auths: account.active.account_auths,
+        key_auths: [[activeKey, 1]]
+      })
+
+      const postingAuth = new dhive.Authority({
+        weight_threshold: account.posting.weight_threshold,
+        account_auths: account.posting.account_auths,
+        key_auths: [[postingKey, 1]]
+      })
+
+      const op = ["account_update", {
+        "account": account.name,
+        "owner": ownerAuth,
+        "active": activeAuth,
+        "posting": postingAuth,
+        "memo_key": memoKey,
+        "json_metadata": account.json_metadata
+      }]
+
+      client.broadcast.sendOperations([op], dhive.PrivateKey.from(privOwnerKey))
+        .then((r) => {
+          console.log(r);
+          feedback.addClass('alert-success').html(`Successfully updated keys for <strong>${username}</strong>.`);
+        })
+        .catch(e => {
+          console.log(e);
+          feedback.addClass('alert-danger').text(e.message);
+        });
+    }
+  });
 });
 
+const voteHiveWitness = () => {
+  if (window.hive_keychain) {
+    window.hive_keychain.requestWitnessVote(null, 'reazuliqbal', true, () => { });
+  } else {
+    window.open('https://hivesigner.com/sign/account-witness-vote?witness=reazuliqbal&approve=1', '_blank');
+  }
+}

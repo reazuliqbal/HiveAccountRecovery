@@ -14,7 +14,7 @@
     />
 
     <link rel="stylesheet" href="css/app.css" />
-    <title>Hive Account Recovery - Request Recovery</title>
+    <title>Hive Account Recovery - Change Keys</title>
   </head>
 
   <body>
@@ -23,89 +23,103 @@
         <h1 class="text-center">Hive Account Recovery</h1>
       </a>
       <hr />
-      <h2 class="text-center mb-5">Request Recovery</h2>
+      <h2 class="text-center mb-5">Change Keys</h2>
 
       <div class="row">
         <div class="offset-md-2 col-md-8">
-          <form id="create-recovery-request" class="mt-5 mb-5" method="POST">
-            <div class="alert" id="alert-create-recovery"></div>
+          <p class="text-muted">
+            Please be extra careful while using this tool, all changes will have
+            immediate effect, and there is no way to revert back unless you have
+            the private owner key.
+          </p>
 
+          <div class="alert" id="alert-change-keys"></div>
+
+          <form id="change-keys" class="mt-5 mb-5">
             <div class="form-group">
-              <label for="trustee-atr" class="control-label"
-                >Account To Recover</label
-              >
+              <label for="hive-username">Username</label>
               <input
                 type="text"
-                name="trustee-atr"
-                id="trustee-atr"
+                name="hive-username"
+                id="hive-username"
                 class="form-control"
                 autocomplete="off"
                 required
               />
               <p class="form-text text-muted">
-                Hive username of the account need recovery.
+                Hive username of account you are updating the keys for.
               </p>
             </div>
 
             <div class="form-group">
-              <label for="atr-new-key" class="control-label"
-                >New Public Owner Key</label
-              >
+              <label for="public-owner-key">Public Owner Key</label>
               <input
                 type="text"
-                name="atr-new-key"
-                id="atr-new-key"
+                name="public-owner-key"
+                id="public-owner-key"
                 class="form-control"
                 autocomplete="off"
-                required
+                placeholder="STM...."
               />
-              <p class="form-text text-muted">
-                PUBLIC OWNER KEY for the account need recovery provided by the
-                real owner of the account.
-              </p>
             </div>
 
             <div class="form-group">
-              <label for="trustee-account" class="control-label"
-                >Trustee Account</label
-              >
+              <label for="public-active-key">Public Active Key</label>
               <input
                 type="text"
-                name="trustee-account"
-                id="trustee-account"
+                name="public-active-key"
+                id="public-active-key"
                 class="form-control"
-                required
+                autocomplete="off"
+                placeholder="STM...."
               />
-              <p class="form-text text-muted">
-                Hive username of the trustee account (recovery account).
-              </p>
             </div>
 
             <div class="form-group">
-              <label for="trustee-key" class="control-label"
-                >Active Private Key</label
+              <label for="public-posting-key">Public Posting Key</label>
+              <input
+                type="text"
+                name="public-posting-key"
+                id="public-posting-key"
+                class="form-control"
+                autocomplete="off"
+                placeholder="STM...."
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="public-memo-key">Public Memo Key</label>
+              <input
+                type="text"
+                name="public-memo-key"
+                id="public-memo-key"
+                class="form-control"
+                autocomplete="off"
+                placeholder="STM...."
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="private-owner-key" class="control-label"
+                >Private Owner Key</label
               >
               <input
                 type="password"
-                name="trustee-key"
-                id="trustee-key"
+                name="private-owner-key"
+                id="private-owner-key"
                 class="form-control"
               />
               <p class="form-text text-muted">
-                PRIVATE ACTIVE KEY of the trustee account (recovery account).
-                <strong>Leave it blank to use Hive Keychain.</strong>
+                Current Private Owner key of the Hive account.
               </p>
             </div>
 
-            <button class="btn btn-success btn-block">
-              Submit Recovery Request
-            </button>
+            <button class="btn btn-success btn-block">Change Keys</button>
           </form>
         </div>
       </div>
 
       <hr />
-
       <div class="text-center">
         <p>
           Brought to you by

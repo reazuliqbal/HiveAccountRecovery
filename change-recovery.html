@@ -1,69 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+      integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N"
+      crossorigin="anonymous"
+    />
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" href="css/app.css" />
     <title>Hive Account Recovery - Change Recovery Account</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <div class="container pt-3">
-        <a href="./">
-            <h1 class="text-center">Hive Account Recovery</h1>
-        </a>
-        <hr>
-        <h2 class="text-center mb-5">Change Recovery Account</h2>
+      <a href="./">
+        <h1 class="text-center">Hive Account Recovery</h1>
+      </a>
+      <hr />
+      <h2 class="text-center mb-5">Change Recovery Account</h2>
 
-        <div class="row">
-            <div class="offset-md-2 col-md-8">
-                <p class="text-muted">Each account lists another account as their recovery account. The recovery account
-                    has the ability to create account_recovery_requests for the account to recover. An account can
-                    change their recovery account at any time with a 30 day delay.</p>
+      <div class="row">
+        <div class="offset-md-2 col-md-8">
+          <p class="text-muted">
+            Each account lists another account as their recovery account. The
+            recovery account has the ability to create account_recovery_requests
+            for the account to recover. An account can change their recovery
+            account at any time with a 30 day delay.
+          </p>
 
-                <div class="alert" id="alert-change-rec"></div>
+          <div class="alert" id="alert-change-rec"></div>
 
-                <form id="change-recovery-account" class="mt-5 mb-5">
-                    <div class="form-group">
-                        <label for="change-rec-atr">Account To Recover</label>
-                        <input type="text" name="change-rec-atr" id="change-rec-atr" class="form-control"
-                            autocomplete="no">
-                        <p class="form-text text-muted">Hive username of account you are trying to change recovery
-                            account.</p>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="change-rec-new">New Recovery Account</label>
-                        <input type="text" name="change-rec-new" id="change-rec-new" class="form-control"
-                            autocomplete="no">
-                        <p class="form-text text-muted">Hive username of the new recovery account. <span
-                                class="text-info">Be careful this account can request account recovery.</span></p>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="change-rec-pass" class="control-label">Master Password</label>
-                        <input type="password" name="change-rec-pass" id="change-rec-pass" class="form-control">
-                        <p class="form-text text-muted">MASTER PASSWORD of account to recover.</p>
-                    </div>
-
-                    <button class="btn btn-success btn-block">Change Account Recovery</button>
-                </form>
+          <form id="change-recovery-account" class="mt-5 mb-5">
+            <div class="form-group">
+              <label for="change-rec-atr">Account To Recover</label>
+              <input
+                type="text"
+                name="change-rec-atr"
+                id="change-rec-atr"
+                class="form-control"
+                autocomplete="off"
+              />
+              <p class="form-text text-muted">
+                Hive username of account you are trying to change recovery
+                account.
+              </p>
             </div>
+
+            <div class="form-group">
+              <label for="change-rec-new">New Recovery Account</label>
+              <input
+                type="text"
+                name="change-rec-new"
+                id="change-rec-new"
+                class="form-control"
+                autocomplete="off"
+              />
+              <p class="form-text text-muted">
+                Hive username of the new recovery account.
+                <span class="text-info"
+                  >Be careful this account can request account recovery.</span
+                >
+              </p>
+            </div>
+
+            <div class="form-group">
+              <label for="change-rec-pass" class="control-label"
+                >Master Password</label
+              >
+              <input
+                type="password"
+                name="change-rec-pass"
+                id="change-rec-pass"
+                class="form-control"
+              />
+              <p class="form-text text-muted">
+                MASTER PASSWORD of account to recover.
+              </p>
+            </div>
+
+            <button class="btn btn-success btn-block">
+              Change Account Recovery
+            </button>
+          </form>
         </div>
+      </div>
 
-        <hr>
-        <p class="text-center">
-            Brought to you by <a href="https://hive.blog/@reazuliqbal">@reazuliqbal</a>
+      <hr />
+
+      <div class="text-center">
+        <p>
+          Brought to you by
+          <a href="https://hive.blog/@reazuliqbal">@reazuliqbal</a>
         </p>
-    </div>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/@hiveio/dhive@1.1.1/dist/dhive.js"></script>
-    <script src="js/app.js"></script>
-</body>
 
+        <a
+          href="javascript:void(0);"
+          class="small text-info"
+          onclick="voteHiveWitness()"
+          >Vote Witness</a
+        >
+      </div>
+    </div>
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://unpkg.com/@hiveio/dhive@1.2.6/dist/dhive.js"></script>
+    <script src="js/app.js"></script>
+  </body>
 </html>
